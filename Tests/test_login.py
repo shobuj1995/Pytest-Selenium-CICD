@@ -1,9 +1,11 @@
+import pytest
+
 from Pages.LoginPage import LoginPage
+from conftest import load_config
 
-def test_login_valid(driver):
-    driver.get("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login")
 
+def test_login_valid(driver, config):
+    driver.get(config["url"])
     login_page = LoginPage(driver)
-    login_page.login("Admin", "admin123")
-
-    assert login_page.is_dashboard_displayed()
+    dashboard=login_page.login(config["username"], config["password"])
+    assert dashboard.is_dashboard_displayed()
