@@ -1,5 +1,12 @@
 {
-  "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
-  "username": "Admin",
-  "password": "admin123"
+  "demoqa": {
+    "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+    "username": "Admin",
+    "password": "admin123"
+  },
+  "rahuls": {
+    "url": "https://rahulshettyacademy.com/loginpagePractise/#",
+    "username": "rahulshettyacademy",
+    "password": "learning"
+  }
 }
