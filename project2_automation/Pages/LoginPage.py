@@ -1,8 +1,11 @@
 from selenium.webdriver.common.by import By
+
+from project2_automation.Pages.BasePage import BasePage
 from project2_automation.Pages.HomePage import HomePage
 
-class LoginPage:
+class LoginPage(BasePage):
     def __init__(self, driver):
+        super().__init__(driver)
         self.driver = driver
         self.username_input = (By.ID, "username")
         self.password_input = (By.ID, "password")

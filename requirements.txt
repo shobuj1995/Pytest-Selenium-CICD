@@ -1,0 +1,20 @@
+# ✅ Selenium for browser automation
+selenium~=4.33.0
+
+# ✅ Pytest test runner
+pytest~=8.3.1
+
+# ✅ Webdriver Manager to auto-download Chrome/Firefox/Edge drivers
+webdriver-manager~=4.0.2
+
+# ✅ HTML reporting
+pytest-html~=4.1.1
+
+# ✅ Allure reporting support
+allure-pytest~=2.13.2
+
+# ✅ Optional: Colorful logs (nicer CLI output)
+pytest-sugar~=1.0.0
+
+# ✅ Optional: Environment variable handling (handy for CI/CD)
+python-dotenv~=1.0.1
