@@ -37,7 +37,9 @@ jobs:
           pytest --html=project2_automation/Reports/report.html --self-contained-html
 
       - name: 📤 Upload HTML report
-        uses: actions/upload-artifact@v4
+        if: always()  # Ensures upload even if tests fail
+        uses: actions/upload-artifact@v3
         with:
           name: html-report
           path: project2_automation/Reports/report.html
+
