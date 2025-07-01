@@ -3,6 +3,8 @@ import os
 import pytest
 from Utils.driver_factory import get_driver
 
+driver = None
+
 def pytest_addoption(parser):
     parser.addoption(
         "--browser_name", action="store", default="chrome", help="Browser to run tests"
@@ -10,6 +12,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="function")
 def browserInstance(request):
+    global driver
     browser_name = request.config.getoption("--browser_name")
     driver = get_driver(browser_name)
     driver.implicitly_wait(5)
@@ -37,8 +40,6 @@ def load_data():
 def login_data_row(request, load_data):
     return load_data["data"][request.param]
 
-
-# --- Add this hook for dynamic parametrization ---
 def pytest_generate_tests(metafunc):
     if "login_data_row" in metafunc.fixturenames:
         data_path = os.path.join(
@@ -51,6 +52,42 @@ def pytest_generate_tests(metafunc):
         indices = list(range(len(test_list)))
         metafunc.parametrize("login_data_row", indices, indirect=True)
 
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item):
+    """
+    Take a screenshot and embed in HTML report if test fails.
+    """
+    pytest_html = item.config.pluginmanager.getplugin('html')
+    outcome = yield
+    report = outcome.get_result()
+    extra = getattr(report, 'extra', [])
+
+    if report.when in ("call", "setup"):
+        xfail = hasattr(report, 'wasxfail')
+        if (report.skipped and xfail) or (report.failed and not xfail):
+            # Screenshot setup
+            reports_dir = os.path.join(os.getcwd(), "project2_automation", "Reports", "screenshots")
+            os.makedirs(reports_dir, exist_ok=True)
+
+            safe_test_name = report.nodeid.replace("::", "_").replace("/", "_").replace("\\", "_")
+            file_name = os.path.join(reports_dir, f"{safe_test_name}.png")
+
+            try:
+                driver = item.funcargs['browserInstance']
+                driver.get_screenshot_as_file(file_name)
+
+                # ✅ Path relative to HTML report
+                html_report_path = item.config.option.htmlpath
+                rel_path = os.path.relpath(file_name, os.path.dirname(html_report_path))
+
+                html = f'<div><img src="{rel_path}" alt="screenshot" style="width:304px;height:228px;" ' \
+                       f'onclick="window.open(this.src)" align="right"/></div>'
+                extra.append(pytest_html.extras.html(html))
+
+            except Exception as e:
+                print(f"[WARNING] Could not capture screenshot: {e}")
+
+            report.extra = extra
 # ___________________________________________________________________________________________________________________________
 # import json
 # import pytest
