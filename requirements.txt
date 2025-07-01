@@ -18,3 +18,7 @@ pytest-sugar~=1.0.0
 
 # ✅ Optional: Environment variable handling (handy for CI/CD)
 python-dotenv~=1.0.1
+
+#For Parallel Execution
+pytest-xdist
+
