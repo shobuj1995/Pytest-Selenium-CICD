@@ -40,9 +40,9 @@ jobs:
         run: |
           pytest --html=project2_automation/Reports/report.html --self-contained-html
 
-      - name: 📤 Upload HTML report (v4)
+      - name: 📤 Upload HTML report with screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: html-report
-          path: project2_automation/Reports/report.html
+          path: project2_automation/Reports/
