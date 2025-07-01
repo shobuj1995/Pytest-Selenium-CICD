@@ -24,6 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest pytest-html
+      
+      - name: 🛠️ Create Reports directory
+        run: mkdir -p project2_automation/Reports
+
 
       - name: 🌐 Install Chrome and Chromedriver
         uses: browser-actions/setup-chrome@v1
