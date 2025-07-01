@@ -6,16 +6,21 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  actions: read
+  id-token: write  # Required for `upload-artifact@v4`
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
       - name: 🔄 Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🐍 Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -28,7 +33,6 @@ jobs:
       - name: 🛠️ Create Reports directory
         run: mkdir -p project2_automation/Reports
 
-
       - name: 🌐 Install Chrome and Chromedriver
         uses: browser-actions/setup-chrome@v1
 
@@ -36,10 +40,9 @@ jobs:
         run: |
           pytest --html=project2_automation/Reports/report.html --self-contained-html
 
-      - name: 📤 Upload HTML report
-        if: always()  # Ensures upload even if tests fail
-        uses: actions/upload-artifact@v3
+      - name: 📤 Upload HTML report (v4)
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: html-report
           path: project2_automation/Reports/report.html
-
